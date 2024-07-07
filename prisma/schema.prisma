@@ -19,5 +19,4 @@ model User {
   firstname  String
   lastname  String
   username String  @unique
-  description String
 }
