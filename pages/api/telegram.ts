@@ -27,8 +27,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           chat_id: chatId,
           text: responseMessage,
           reply_markup: {
-            inline_keyboard: [[
-              { text: 'Open Google', url: 'https://google.com' }
+            keyboard: [[
+              { text: 'Open Google', web_app : {url: 'https://google.com' }}
             ]]
           },
         }),
