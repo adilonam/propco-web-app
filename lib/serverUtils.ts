@@ -1,12 +1,12 @@
-// lib/userUtils.ts
+
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function createUserIfNotExists(userData: { id: number; firstname: string; lastname: string; username: string; }) {
+export async function createUserIfNotExists(userData: { id: bigint; firstname: string; lastname: string; username: string }) {
   const { id, firstname, lastname, username } = userData;
 
-  // Check if the user already exists
+  // Check if the user already exists based on the id
   const existingUser = await prisma.user.findUnique({
     where: { id }
   });
@@ -19,7 +19,7 @@ export async function createUserIfNotExists(userData: { id: number; firstname: s
   // If the user does not exist, create a new user
   const newUser = await prisma.user.create({
     data: {
-      id, // Optional field, will be auto-generated if not provided
+      id, // Must be provided as the Telegram ID (user ID)
       firstname,
       lastname,
       username,

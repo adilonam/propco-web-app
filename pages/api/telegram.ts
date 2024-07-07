@@ -6,7 +6,7 @@ import { createUserIfNotExists } from '../../lib/serverUtils';
 type TelegramMessage = {
   message?: {
     chat: {
-      id: number;
+      id: number; // Telegram chat ID which is also the user ID in the case of private messages
       first_name?: string;
       last_name?: string;
       username?: string;
@@ -19,8 +19,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     const { message }: TelegramMessage = req.body;
 
+    // Ensure we are handling a private chat and the start command
     if (message && message.text === '/start') {
-      const chatId = message.chat.id; // Using this as the user ID
+      const chatId = BigInt(message.chat.id); // This is the user's Telegram ID, converted to BigInt
       const responseMessage = 'Opening App...';
       const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
 
@@ -30,10 +31,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // Create or find the user in the database
       try {
         const user = await createUserIfNotExists({
-          id: chatId, // Using chatId as the user ID
+          id: chatId, // Using chatId from Telegram as the user ID (BigInt)
           firstname: first_name || 'Unknown',
           lastname: last_name || 'User',
-          username: username || `user${chatId}`,
+          username: username || `user_${chatId}`,
         });
 
         console.log('User created or found:', user);
@@ -49,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          chat_id: chatId,
+          chat_id: message.chat.id, // Passing the original chatId without converting to BigInt
           text: responseMessage,
           reply_markup: {
             inline_keyboard: [[
