@@ -28,13 +28,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           text: responseMessage,
           reply_markup: {
             inline_keyboard: [[
-              { text: 'Open Google', web_app: { url: 'https://www.google.com' } }
+              { text: 'Open Google', web_app: { url: process.env.DOMAIN} }
             ]]
           },
         }),
       });
     }
-    
+
     res.status(200).send('OK');
   } else {
     res.status(405).send('Method Not Allowed');
