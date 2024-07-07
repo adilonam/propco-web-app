@@ -43,9 +43,8 @@ export default function Navbar() {
 
   const navigation = [
     { name: 'Home', href: '/', current: pathname === '/' },
-    { name: 'Password', href: '/password-app', current: pathname === '/password-app' },
-    { name: 'Sign In', href: '/signin', current: pathname === '/signin' },
-    { name: 'Sign Up', href: '/signup', current: pathname === '/signup' },
+    { name: 'Tasks', href: '/tasks', current: pathname === '/tasks' },
+    { name: 'Squad', href: '/squad', current: pathname === '/squad' },
   ]
 
   return (
