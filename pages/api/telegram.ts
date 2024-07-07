@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (message && message.text === '/start') {
       const chatId = message.chat.id;
-      const responseMessage = 'Opening Google...';
+      const responseMessage = 'Opening App...';
       const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
 
       await fetch(url, {
@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           text: responseMessage,
           reply_markup: {
             inline_keyboard: [[
-              { text: 'Open Google', web_app: { url: process.env.DOMAIN} }
+              { text: 'Open App', web_app: { url: process.env.DOMAIN} }
             ]]
           },
         }),
