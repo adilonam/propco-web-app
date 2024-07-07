@@ -3,6 +3,7 @@ import Image from 'next/image';
 import logo from '@/assets/logo.png'
 
 import { useRouter } from 'next/navigation'
+import BalanceCard from '@/components/BalanceCard';
 
 export default function Home() {
 
@@ -10,9 +11,10 @@ export default function Home() {
 
   return (
     <div className='flex items-center'>
-      <div className='mx-auto max-w-2xl py-28 sm:py-30 lg:py-40'>
-        <div className='text-center'>
-          <h1 className='text-4xl font-bold tracking-tight  sm:text-6xl dark:text-white text-black'>
+      <div className='mx-auto max-w-2xl '>
+        <BalanceCard balance={1234.56} logoSrc={logo} currency="PROPCO" />
+        <div className="text-center">
+        <h1 className='text-4xl font-bold tracking-tight  sm:text-6xl dark:text-white text-black mt-3'>
             Welcome to Propco Token App
           </h1>
           <Image src={logo} alt="logo" width={200} height={200} className='mx-auto mt-10'/>
@@ -28,6 +30,8 @@ export default function Home() {
             </button>
           </div>
         </div>
+         
+
       </div>
     </div>
   )
