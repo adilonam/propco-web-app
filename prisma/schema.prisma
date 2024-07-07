@@ -15,8 +15,9 @@ datasource db {
 
 
 model User {
-  id    BigInt     @id 
+  id    BigInt     @id @unique
   firstname  String
   lastname  String
   username String  @unique
+  balance Float @default(0)
 }

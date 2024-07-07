@@ -1,3 +1,5 @@
+"use client"
+
 import Image, { StaticImageData } from 'next/image';
 
 type BalanceCardProps = {
@@ -18,13 +20,10 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ balance, logoSrc, currency })
           <p className="text-gray-600 dark:text-gray-400">{currency}</p>
         </div>
       </div>
-      <div className="px-7 pt-6 pb-10">
+      <div className="px-7 pt-7 pb-5">
         <div className="text-center mb-4">
           <span className="text-3xl font-bold text-gray-800 dark:text-gray-200">{balance.toFixed(2)}</span>
         </div>
-        <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Add Funds
-        </button>
       </div>
     </div>
   );
