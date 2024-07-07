@@ -1,7 +1,7 @@
 // pages/api/createUser.ts
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createUserIfNotExists } from '../../lib/userUtils';
+import { createUserIfNotExists } from '../../lib/serverUtils';
 
 type TelegramMessage = {
   message?: {
