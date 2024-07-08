@@ -18,11 +18,10 @@ type TelegramMessage = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const { message }: TelegramMessage = req.body;
-
+console.log(message)
     // Ensure we are handling a private chat and the start command
     if (message && message.text === '/start') {
       const chatId = BigInt(message.chat.id); // This is the user's Telegram ID, converted to BigInt
-      const responseMessage = 'Opening App...';
       const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
 
       // Extract user info from the Telegram message
