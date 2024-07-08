@@ -3,8 +3,9 @@ import Image from 'next/image';
 import logo from '@/assets/logo.png'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useSearchParams } from 'next/navigation';
 import BalanceCard from '@/components/BalanceCard';
+import { useParams } from 'next/navigation'
+
 
 interface User {
   id: string;
@@ -13,12 +14,14 @@ interface User {
   username: string;
   balance: string;
 }
-export default function Home() {
+export default function Page() {
   const [user, setUser] = useState<User | null>(null);
   const [clickCount, setClickCount] = useState(0);
-  const searchParams = useSearchParams();
-  const id = searchParams?.get('id');
 
+  const params = useParams<{ id: string }>()
+ 
+  const id = params.id
+ 
 
 
   const [isVibrating, setIsVibrating] = useState(false);
@@ -52,7 +55,9 @@ export default function Home() {
 
   
   return (
-    <div className='container mx-auto py-3'>
+    <>
+
+       <div className='container mx-auto py-3'>
       <div className='flex flex-col justify-center '>
       <BalanceCard balance={parseFloat(user?.balance || '0') } logoSrc={logo} currency="PROPCO" />
     
@@ -94,5 +99,11 @@ export default function Home() {
 
 
     </div>
+
+  
+    
+    
+    </>
+  
   )
 }
