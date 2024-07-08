@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     const { message }: TelegramMessage = req.body;
     // Ensure we are handling a private chat and the start command
-    if (message && (message.text === '/start' || message.text === 'dd' ) ) {
+    if (message && (message.text === '/start') ) {
       const chatId = BigInt(message.chat.id); // This is the user's Telegram ID, converted to BigInt
       const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
 
@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             text: "🌟 Welcome to the Ultimate PROPCO Token App! 🌟\n\n🚀 Buy Propco on Bitmart 🌐\nInvest in the future today! Click the link below to buy your Propco tokens and be part of the revolution:\n👉 https://www.bitmart.com/trade/en-US?symbol=PROPCO_USDT\n\n📢 Join the Official Channel 🕸️\nStay updated with the latest news, updates, and community discussions. Join us on Telegram:\n👉 https://t.me/propco\n\n🎉 Get Rewarded 🎉\nEarn Propco for free! Participate in various activities and tasks to get rewarded. The more you engage, the more you earn!\n\n👯‍♂️ Refer a Friend\nSpread the word! When your friends buy Propco, you get rewarded in Propco. Double the benefits, double the fun. Let's create a community of like-minded investors!\n\n🌔 Take Us to the Moon! 🌕\nBe a part of our journey to the moon. Your support can take us higher than ever before. Join the movement and watch your investment soar!",
             reply_markup: {
               inline_keyboard: [[
-                { text: 'Open App', web_app: { url: `${process.env.DOMAIN}?id=${user.id}` } }
+                { text: 'Open App', web_app: { url: `${process.env.DOMAIN}/${user.id}` } }
               ]]
             },
          }),
