@@ -20,7 +20,7 @@ export default function Page() {
 
   const params = useParams<{ id: string }>()
  
-  const id = params.id
+  const id = params?.id
  
 
 
