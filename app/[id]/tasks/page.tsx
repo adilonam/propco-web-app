@@ -2,15 +2,21 @@
 "use client"
 
 import React from "react";
-
+import TaskCard from "@/components/TaskCard";
+import { useParams } from 'next/navigation'
 
 
 const Tasks = () => {
-  return (
-    <div>
-      <h1>Welcome to My Next.js Page</h1>
+    const params = useParams<{ id: string }>()
  
-      <p>This is a simple Next.js page written in TypeScript.</p>
+    const id: BigInt = BigInt( params?.id as string || "0")
+
+    
+  return (
+    <div className="container">
+  
+  <TaskCard id={id} friends={1} reward={"100"}></TaskCard>
+
     </div>
   );
 };

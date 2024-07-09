@@ -2,7 +2,7 @@
   "name": "propco-web-app",
   "version": "0.1.0",
   "private": true,
-    "type": "module",
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && prisma migrate deploy && next build",
@@ -13,6 +13,7 @@
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.4",
     "@prisma/client": "^5.16.2",
+    "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "axios": "^1.7.2",
