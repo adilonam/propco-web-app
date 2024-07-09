@@ -32,7 +32,7 @@ const TaskCard :React.FC<TaskParams> = ({id,  friends, reward }) => {
     
     return (
 
-        <Card >
+        <Card className="my-3">
             <CardHeader>
                 <CardTitle>Inivte {friends} Friend</CardTitle>
                 <CardDescription>
