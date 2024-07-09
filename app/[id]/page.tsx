@@ -6,7 +6,7 @@ import axios from 'axios';
 import BalanceCard from '@/components/BalanceCard';
 import { useParams } from 'next/navigation'
 import "./styleHome.css";
-
+import { useToast } from "@/components/ui/use-toast"
 interface User {
   id: string;
   firstname: string;
@@ -17,7 +17,7 @@ interface User {
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [clickCount, setClickCount] = useState(0);
-
+  const { toast } = useToast()
   const params = useParams<{ id: string }>()
  
   const id: BigInt = BigInt( params?.id as string)
@@ -37,6 +37,7 @@ export default function Home() {
 
 
 const handleClaimClick = (userId: BigInt , addAmount :number)=>{
+  if(addAmount <= 0) return
  let  userIdNum = Number(userId)
   axios.put('/api/user/update-balance', {
     userId: userIdNum,
@@ -54,7 +55,9 @@ const handleClaimClick = (userId: BigInt , addAmount :number)=>{
     });
 
     setClickCount(0)
-
+    toast({
+      description: "Tokens claimed successfully.",
+    })
     console.log('User updated:', response.data);
   })
   .catch(error => {
@@ -80,7 +83,6 @@ const handleClaimClick = (userId: BigInt , addAmount :number)=>{
   
   return (
     <>
-
        <div className='container mx-auto py-3'>
       <div className='flex flex-col justify-center '>
       <BalanceCard balance={parseFloat(user?.balance || '0') } logoSrc={logo} currency="PROPCO" />
