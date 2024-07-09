@@ -20,7 +20,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ balance, logoSrc, currency })
           <p className="text-gray-600 dark:text-gray-400">{currency}</p>
         </div>
       </div>
-      <div className="px-7 pt-7 pb-5">
+      <div className="px-7 pt-7 pb-3">
         <div className="text-center mb-4">
           <span className="text-3xl font-bold text-gray-800 dark:text-gray-200">{balance.toFixed(2)}</span>
         </div>

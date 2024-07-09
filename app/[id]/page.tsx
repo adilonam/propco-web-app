@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import BalanceCard from '@/components/BalanceCard';
 import { useParams } from 'next/navigation'
-
+import "./styleHome.css";
 
 interface User {
   id: string;
@@ -14,13 +14,13 @@ interface User {
   username: string;
   balance: string;
 }
-export default function Page() {
+export default function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [clickCount, setClickCount] = useState(0);
 
   const params = useParams<{ id: string }>()
  
-  const id = params?.id
+  const id: BigInt = BigInt( params?.id as string)
  
 
 
@@ -36,7 +36,31 @@ export default function Page() {
   };
 
 
+const handleClaimClick = (userId: BigInt , addAmount :number)=>{
+ let  userIdNum = Number(userId)
+  axios.put('/api/user/update-balance', {
+    userId: userIdNum,
+    addAmount
+  })
+  .then(response => {
+    setUser(prevUser => {
+      if (prevUser) {
+        return {
+          ...prevUser,
+          balance: response.data.balance
+        };
+      }
+      return prevUser;
+    });
 
+    setClickCount(0)
+
+    console.log('User updated:', response.data);
+  })
+  .catch(error => {
+    console.error('Error updating user balance:', error.response?.data || error.message);
+  });
+}
 
 
 
@@ -68,11 +92,12 @@ export default function Page() {
     onClick={handleClick} 
     className={`mx-auto mt-10 inline-block ${isVibrating ? 'vibrate' : ''}`}
     style={{ cursor: 'pointer', position: 'relative', display: 'inline-block' }}>
-    <Image src={logo} alt="logo" width={350} height={350} className='mx-auto mt-10'/>
+    <Image src={logo} alt="logo" width={300} height={300} className='mx-auto mt-10'/>
   </div>
   <div className="max-w-sm mx-auto text-center mt-5 text-lg font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg shadow-lg ">
    <p>⚡ Logo clicked {clickCount} times ⚡</p> 
     <button
+onClick={()=>handleClaimClick(id, clickCount)}
     className="mt-5 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg transition duration-300 ease-in-out">
     Claim
   </button>
