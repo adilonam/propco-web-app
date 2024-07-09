@@ -32,7 +32,7 @@ export default function Navbar() {
 
   const params = useParams<{ id: string }>()
 
-  const id: BigInt = BigInt( params?.id as string)
+  const id: BigInt = BigInt( params?.id as string || "0")
   
 
 
