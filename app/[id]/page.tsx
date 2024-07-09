@@ -7,13 +7,9 @@ import BalanceCard from '@/components/BalanceCard';
 import { useParams } from 'next/navigation'
 import "./styleHome.css";
 import { useToast } from "@/components/ui/use-toast"
-interface User {
-  id: string;
-  firstname: string;
-  lastname: string;
-  username: string;
-  balance: string;
-}
+import { User } from '@prisma/client';
+
+
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [clickCount, setClickCount] = useState(0);
@@ -85,7 +81,7 @@ const handleClaimClick = (userId: BigInt , addAmount :number)=>{
     <>
        <div className='container mx-auto py-3'>
       <div className='flex flex-col justify-center '>
-      <BalanceCard balance={parseFloat(user?.balance || '0') } logoSrc={logo} currency="PROPCO" />
+      <BalanceCard balance={user?.balance || 0 } logoSrc={logo} currency="PROPCO" />
     
     <h1 className='text-4xl text-center font-bold tracking-tight  sm:text-6xl dark:text-white text-black mt-3'>
         Welcome to Propco Token App

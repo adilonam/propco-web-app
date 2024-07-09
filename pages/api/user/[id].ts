@@ -25,9 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
 
    // Convert BigInt properties to strings for JSON serialization
-   const serializedUser = Object.fromEntries(
-    Object.entries(user).map(([key, value]) => [key, String(value)])
-  );
+   const serializedUser = {...user , id: user.id.toString()}
 
   res.status(200).json(serializedUser)
 

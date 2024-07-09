@@ -29,9 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       data: { balance: (addAmount + user.balance) }
     })
 
-    const serializedUser = Object.fromEntries(
-      Object.entries(updatedUser ).map(([key, value]) => [key, String(value)])
-    );
+    const serializedUser = {...user , id: user.id.toString()}
 
     res.status(200).json(serializedUser)
   } catch (error) {
