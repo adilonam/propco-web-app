@@ -59,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // rewards
         const number = extractNumberFromStartCommand(message.text);
-        if (number !== null && created) {
+        if (number !== null && !created) {
           try {
 
             const user = await prisma.user.findUnique({
