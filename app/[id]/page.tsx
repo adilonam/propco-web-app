@@ -20,7 +20,7 @@ export default function Home() {
   const { toast } = useToast()
   const params = useParams<{ id: string }>()
  
-  const id: BigInt = BigInt( params?.id as string)
+  const id: BigInt = BigInt( params?.id as string || "0")
  
 
 

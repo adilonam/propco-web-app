@@ -74,7 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           text: "Bad Request.",
         }),
       });
-      return res.status(400).send('Bad Request');
+      return res.status(200).send('Ok');
     }
   } else {
     res.setHeader('Allow', ['POST']);
