@@ -33,19 +33,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
     const { message }: TelegramMessage = req.body;
-    const reward = 100 
-    console.log( req.body);
+    const reward = 100
+    console.log(req.body);
     // Ensure we are handling a private chat and the start command
-    if (message && (message.text.startsWith('/start') ) ) {
+    if (message && (message.text.startsWith('/start'))) {
       const chatId = BigInt(message.chat.id); // This is the user's Telegram ID, converted to BigInt
-    
+
 
       // Extract user info from the Telegram message
       const { first_name, last_name, username } = message.chat;
 
       // Create or find the user in the database
       try {
-        const {user , created} = await createUserIfNotExists({
+        const { user, created } = await createUserIfNotExists({
           id: chatId, // Using chatId from Telegram as the user ID (BigInt)
           firstname: first_name || 'Unknown',
           lastname: last_name || 'User',
@@ -59,29 +59,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // rewards
         const number = extractNumberFromStartCommand(message.text);
-        if (number !== null && created) {
+        if (number !== null && !created) {
           try {
 
             const user = await prisma.user.findUnique({
               where: { id: BigInt(number) }, // Convert ID to BigInt
             });
-        
-            
-        if(user){
-          const updatedUser  = await prisma.user.update({
-            where: { id: number },
-            data: { balance: ( reward + user.balance) }
-          })
-          console.log('User has reward ' + reward, updatedUser);
-        }
-          
-        
-        
-         
+
+
+            if (user) {
+              const updatedUser = await prisma.user.update({
+                where: { id: number },
+                data: { balance: (reward + user.balance) }
+              })
+              console.log('User has reward ' + reward, updatedUser);
+            }
+
           } catch (error) {
-           console.log( 'An error occurred while updating the reward balance');
+            console.log('An error occurred while updating the reward balance');
           }
-        } 
+        }
         // Respond to the Telegram message
         await fetch(url, {
           method: 'POST',
@@ -96,8 +93,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 { text: 'Open App', web_app: { url: `${process.env.DOMAIN}/${user.id}` } }
               ]]
             },
-         }),
-         
+          }),
+
         });
       } catch (error) {
         console.error('Error creating or finding user:', error);
