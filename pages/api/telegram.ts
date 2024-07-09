@@ -17,12 +17,13 @@ type TelegramMessage = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
+    const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
     const { message }: TelegramMessage = req.body;
     console.log( req.body);
     // Ensure we are handling a private chat and the start command
     if (message && (message.text === '/start') ) {
       const chatId = BigInt(message.chat.id); // This is the user's Telegram ID, converted to BigInt
-      const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
+    
 
       // Extract user info from the Telegram message
       const { first_name, last_name, username } = message.chat;
@@ -63,6 +64,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       return res.status(200).send('OK');
     } else {
+      await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: message?.chat.id,
+          text: "Bad Request.",
+        }),
+      });
       return res.status(400).send('Bad Request');
     }
   } else {
