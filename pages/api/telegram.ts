@@ -70,7 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (user) {
               const updatedUser = await prisma.user.update({
                 where: { id: number },
-                data: { balance: (reward + user.balance) }
+                data: { balance: (reward + user.balance) , invitedFriend: (1+ user.invitedFriend) }
               })
               console.log('User has reward ' + reward, updatedUser);
             }

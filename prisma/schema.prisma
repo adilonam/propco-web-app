@@ -20,4 +20,5 @@ model User {
   lastname  String
   username String  @unique
   balance Float @default(0)
+  invitedFriend Int @default(0)
 }
