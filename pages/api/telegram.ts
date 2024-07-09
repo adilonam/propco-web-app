@@ -2,6 +2,9 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createUserIfNotExists } from '../../lib/serverUtils';
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 type TelegramMessage = {
   message?: {
@@ -15,13 +18,25 @@ type TelegramMessage = {
   };
 };
 
+
+function extractNumberFromStartCommand(text: string): bigint | null {
+  // Regular expression to match '/start' followed by a space and a number
+  const match = text.match(/^\/start (\d+)$/);
+  if (match) {
+    const number = BigInt(match[1]); // Convert the matched number to a BigInt
+    return number;
+  } else {
+    return null; // No number found after /start
+  }
+}
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
     const { message }: TelegramMessage = req.body;
+    const reward = 100 
     console.log( req.body);
     // Ensure we are handling a private chat and the start command
-    if (message && (message.text === '/start') ) {
+    if (message && (message.text.startsWith('/start') ) ) {
       const chatId = BigInt(message.chat.id); // This is the user's Telegram ID, converted to BigInt
     
 
@@ -30,14 +45,43 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       // Create or find the user in the database
       try {
-        const user = await createUserIfNotExists({
+        const {user , created} = await createUserIfNotExists({
           id: chatId, // Using chatId from Telegram as the user ID (BigInt)
           firstname: first_name || 'Unknown',
           lastname: last_name || 'User',
           username: username || `user_${chatId}`,
         });
 
+
+
         console.log('User created or found:', user);
+
+
+        // rewards
+        const number = extractNumberFromStartCommand(message.text);
+        if (number !== null && created) {
+          try {
+
+            const user = await prisma.user.findUnique({
+              where: { id: BigInt(number) }, // Convert ID to BigInt
+            });
+        
+            
+        if(user){
+          const updatedUser  = await prisma.user.update({
+            where: { id: number },
+            data: { balance: ( reward + user.balance) }
+          })
+          console.log('User has reward ' + reward, updatedUser);
+        }
+          
+        
+        
+         
+          } catch (error) {
+           console.log( 'An error occurred while updating the reward balance');
+          }
+        } 
         // Respond to the Telegram message
         await fetch(url, {
           method: 'POST',

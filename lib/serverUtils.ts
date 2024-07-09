@@ -1,4 +1,3 @@
-
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -11,9 +10,9 @@ export async function createUserIfNotExists(userData: { id: bigint; firstname: s
     where: { id }
   });
 
-  // If the user already exists, return the existing user
+  // If the user already exists, return the existing user and false indicating it was not created
   if (existingUser) {
-    return existingUser;
+    return { user: existingUser, created: false };
   }
 
   // If the user does not exist, create a new user
@@ -26,5 +25,6 @@ export async function createUserIfNotExists(userData: { id: bigint; firstname: s
     },
   });
 
-  return newUser;
+  // Return the newly created user and true indicating it was created
+  return { user: newUser, created: true };
 }
