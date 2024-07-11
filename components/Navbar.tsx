@@ -59,6 +59,7 @@ export default function Navbar() {
 
   const navigation = [
     { name: 'Home', href:`/${id}`},
+    { name: 'Claim Request', href:`/${id}/claim-request`},
     { name: 'About', href: `/${id}/about` },
   ]
 
@@ -148,7 +149,7 @@ export default function Navbar() {
                   <Disclosure.Button
                     key={item.name}
                     as='a'
-                    href={item.href}
+                    onClick={() => router.push(item.href)}
                     className={classNames(
                       (item.href === pathname)
                         ? 'bg-gray-900 text-white dark:text-black dark:bg-white'

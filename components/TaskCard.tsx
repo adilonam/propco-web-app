@@ -48,7 +48,7 @@ const TaskCard :React.FC<TaskParams> = ({id,  friends, reward }) => {
             </CardHeader>
 
             <CardFooter className="flex justify-end">
-                <Button onClick={handleClick}>Send Bulk Invitation</Button>
+                <Button onClick={handleClick}>Send Invitation</Button>
             </CardFooter>
         </Card>
 

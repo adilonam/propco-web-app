@@ -1,10 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-
 import { prisma } from '../../../lib/prisma';
-
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
+
   // Check that the id is a string
   if (typeof id !== 'string') {
     res.status(400).json({ error: 'Invalid ID format.' });
@@ -20,7 +19,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         if (claimRequest) {
-          res.status(200).json(claimRequest);
+          const serializedClaimRequest = { ...claimRequest, userId: claimRequest.userId.toString() };
+          res.status(200).json(serializedClaimRequest);
         } else {
           res.status(404).json({ error: 'Claim request not found.' });
         }
@@ -44,7 +44,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         });
 
-        res.status(200).json(updatedClaimRequest);
+        const serializedUpdatedClaimRequest = { ...updatedClaimRequest, userId: updatedClaimRequest.userId.toString() };
+        res.status(200).json(serializedUpdatedClaimRequest);
       } catch (error) {
         res.status(500).json({ error: 'Failed to update claim request.' });
       }
@@ -63,28 +64,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
       break;
 
-    case 'POST':
-      try {
-        // Create a new claim request
-        const { date, userId, email, cryptoAddress, phone } = req.body;
-        const newClaimRequest = await prisma.claimRequest.create({
-          data: {
-            date,
-            userId,
-            email,
-            cryptoAddress,
-            phone,
-          },
-        });
-
-        res.status(201).json(newClaimRequest);
-      } catch (error) {
-        res.status(500).json({ error: 'Failed to create claim request.' });
-      }
-      break;
-
     default:
-      res.setHeader('Allow', ['GET', 'PUT', 'DELETE', 'POST']);
+      res.setHeader('Allow', ['GET', 'PUT', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
       break;
   }
