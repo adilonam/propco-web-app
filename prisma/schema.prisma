@@ -13,18 +13,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id             BigInt       @id @unique
-  firstname      String
-  lastname       String
-  username       String       @unique
-  balance        Float        @default(0)
-  invitedFriend Int @default(0)
-  sourceInvitations  Invitation[] @relation("sourceUser")
-  invitedInvitations Invitation[] @relation("invitedUser")
+  id                 BigInt         @id @unique
+  firstname          String
+  lastname           String
+  username           String         @unique
+  balance            Float          @default(0)
+  invitedFriend      Int            @default(0)
+  sourceInvitations  Invitation[]   @relation("sourceUser")
+  invitedInvitations Invitation[]   @relation("invitedUser")
+  claimRequests       ClaimRequest[]
 }
-
 
 model Invitation {
   id            String   @id @default(cuid())
@@ -33,4 +32,15 @@ model Invitation {
   invitedUserId BigInt
   sourceUser    User     @relation(fields: [sourceUserId], references: [id], onDelete: Cascade, name: "sourceUser")
   invitedUser   User     @relation(fields: [invitedUserId], references: [id], onDelete: Cascade, name: "invitedUser")
+}
+
+
+model ClaimRequest {
+  id     String   @id @default(cuid())
+  date   DateTime
+  userId BigInt
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  email String
+  cryptoAddress String
+  phone String
 }

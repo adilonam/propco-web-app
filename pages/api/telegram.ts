@@ -2,9 +2,7 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createUserIfNotExists, invitationReward } from '../../lib/serverUtils';
-import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
 
 type TelegramMessage = {
   message?: {
@@ -33,7 +31,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'POST') {
     const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
     const { message }: TelegramMessage = req.body;
-    const reward = 100
     console.log(req.body);
     // Ensure we are handling a private chat and the start command
     if (message && (message.text.startsWith('/start'))) {
@@ -60,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // rewards
         const sourceUserId = extractNumberFromStartCommand(message.text);
         if (sourceUserId !== null && created) {
-          await invitationReward(sourceUserId, user.id, reward);
+          await invitationReward(sourceUserId, user.id, parseFloat(process.env.NEXT_PUBLIC_INVITATION_REWARD as string) );
         }
         // Respond to the Telegram message
         await fetch(url, {

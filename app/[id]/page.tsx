@@ -109,7 +109,7 @@ export default function Home() {
                         </Alert>
 
 
-                        <TaskCard id={id} friends={1} reward={"100"}></TaskCard>
+                        <TaskCard id={id} friends={1} reward={process.env.NEXT_PUBLIC_INVITATION_REWARD as string}></TaskCard>
                     </div>
 
 
