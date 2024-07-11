@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -27,4 +27,34 @@ export async function createUserIfNotExists(userData: { id: bigint; firstname: s
 
   // Return the newly created user and true indicating it was created
   return { user: newUser, created: true };
+}
+
+
+
+export async function invitationReward(sourceUserId: bigint, invitedUserId: bigint, reward: number) {
+
+  try {
+    const invitation = await prisma.invitation.create({
+      data: { sourceUserId, invitedUserId, date: new Date() }
+    })
+    
+    const sourceUser = await prisma.user.findUnique({
+      where: { id: sourceUserId }, // Convert ID to BigInt
+    });
+
+    if (sourceUser) {
+      const sourceUserUpated = await prisma.user.update({
+        where: { id: sourceUserId },
+        data: { balance: (reward + sourceUser.balance), invitedFriend: (1 + sourceUser.invitedFriend) }
+      })
+      console.log('User has reward ' + reward, sourceUserUpated);
+      return sourceUserUpated
+    }
+    else {
+      console.log('No user found for this invitation .');
+    }
+
+  } catch (error) {
+    console.log('An error occurred while updating the reward balance');
+  }
 }

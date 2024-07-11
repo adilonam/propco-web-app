@@ -1,7 +1,7 @@
 // pages/api/createUser.ts
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createUserIfNotExists } from '../../lib/serverUtils';
+import { createUserIfNotExists, invitationReward } from '../../lib/serverUtils';
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
@@ -58,26 +58,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
         // rewards
-        const number = extractNumberFromStartCommand(message.text);
-        if (number !== null && created) {
-          try {
-
-            const user = await prisma.user.findUnique({
-              where: { id: BigInt(number) }, // Convert ID to BigInt
-            });
-
-
-            if (user) {
-              const updatedUser = await prisma.user.update({
-                where: { id: number },
-                data: { balance: (reward + user.balance) , invitedFriend: (1+ user.invitedFriend) }
-              })
-              console.log('User has reward ' + reward, updatedUser);
-            }
-
-          } catch (error) {
-            console.log('An error occurred while updating the reward balance');
-          }
+        const sourceUserId = extractNumberFromStartCommand(message.text);
+        if (sourceUserId !== null && !created) {
+          await invitationReward(sourceUserId, user.id, reward);
         }
         // Respond to the Telegram message
         await fetch(url, {
