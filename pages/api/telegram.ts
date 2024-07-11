@@ -59,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // rewards
         const sourceUserId = extractNumberFromStartCommand(message.text);
-        if (sourceUserId !== null && !created) {
+        if (sourceUserId !== null && created) {
           await invitationReward(sourceUserId, user.id, reward);
         }
         // Respond to the Telegram message

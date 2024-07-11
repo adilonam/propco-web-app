@@ -59,8 +59,7 @@ export default function Navbar() {
 
   const navigation = [
     { name: 'Home', href:`/${id}`},
-    { name: 'Tasks', href:`/${id}/tasks`},
-    { name: 'Squad', href: `/${id}/squad` },
+    { name: 'About', href: `/${id}/about` },
   ]
 
   return (
