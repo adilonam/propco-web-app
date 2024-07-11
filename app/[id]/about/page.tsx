@@ -8,7 +8,7 @@ const About: React.FC = () => {
         Welcome to PropCo Token App. This application is designed to reward users with a token named Propco. Our platform enables users to earn tokens through various activities and referrals, fostering a vibrant and engaged community.
       </p>
       <p className="mb-4">
-        Our mission is to create an innovative and rewarding experience for our users. With Propco Token, we aim to provide a seamless and user-friendly way to earn and manage your tokens. Whether you're inviting friends or participating in our activities, there's always an opportunity to earn more PropCo tokens.
+        Our mission is to create an innovative and rewarding experience for our users. With Propco Token, we aim to provide a seamless and user-friendly way to earn and manage your tokens. Whether you&apos;re inviting friends or participating in our activities, there&apos;s always an opportunity to earn more PropCo tokens.
       </p>
       <p className="mb-4">
         Thank you for being a part of the Propco Token community. We look forward to helping you maximize your rewards and enjoy all the benefits that come with being a Propco Token holder.
