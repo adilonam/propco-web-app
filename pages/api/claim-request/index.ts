@@ -7,6 +7,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       try {
         // Get all claim requests and include user details
         const claimRequests = await prisma.claimRequest.findMany({
+          distinct: ['userId'],
+          orderBy: {
+            date: 'desc',  // Order by date descending to get the most recent date
+          },
           include: {
             user: true, // Include the related user details
           },

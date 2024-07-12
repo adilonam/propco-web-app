@@ -31,8 +31,9 @@ export default function Home() {
     };
 
     const handleClickBitmart = () => {
-        window.location.href = 'https://www.bitmart.com/trade/en-US?symbol=PROPCO_USDT';
+        window.open('https://www.bitmart.com/trade/en-US?symbol=PROPCO_USDT', '_blank');
     };
+    
     const handleClick = () => {
         setClickCount(prevCount => prevCount + 1);
         setIsVibrating(true);

@@ -38,6 +38,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             where: { id },
             data: { approve },
           });
+
+          const user = await prisma.user.update({
+            where: { id: updatedClaimRequest.userId }, 
+            data:{balance:0}
+          });
       
           const serializedUpdatedClaimRequest = {
             ...updatedClaimRequest,

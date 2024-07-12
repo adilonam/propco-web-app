@@ -44,157 +44,20 @@ import { ClaimRequest, User } from '@prisma/client';
 
 import React from 'react';
 import axios from "axios"
+import { useToast } from "@/components/ui/use-toast"
+
 
 interface ClaimRequestData extends ClaimRequest  {
-user: User 
+user: User ,
 }
    
-  
-   
-   const columns: ColumnDef<ClaimRequestData>[] = [
-    {
-      accessorKey: "userId",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            user Id
-            <CaretSortIcon className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("userId")}</div>,
-    },
-    
-    {
-      accessorKey: "email",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Email
-            <CaretSortIcon className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-    },
-    {
-      accessorKey: "cryptoAddress",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Crypto Address
-            <CaretSortIcon className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("cryptoAddress")}</div>,
-    },
- 
-    {
-      accessorKey: "phone",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Phone
-            <CaretSortIcon className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
-    },
-    {
-      accessorKey: "balance",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Balance
-            <CaretSortIcon className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      cell: ({ row }) => {
-        const user = row.original.user as User; // Explicitly type the user object
-        return <div className="lowercase">{user.balance}</div>;
-      },
-    },
-    {
-      accessorKey: "date",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Date
-            <CaretSortIcon className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("date")}</div>,
-    },
-    {
-      accessorKey: "approve",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Approve
-            <CaretSortIcon className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      cell: ({ row }) => {
-        const approveText = row.getValue("approve") ? "Yes" : "No"; // Explicitly type the user object
-        return <div className="lowercase">{approveText}</div>;
-      },
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const payment = row.original
-   
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <DotsHorizontalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(payment.id)}
-              >
-                Aprroved
-              </DropdownMenuItem>
-              
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )
-      },
-    },
-  ]
+
+
    
   export default function ClaimRequestPage() {
+
+    const { toast } = useToast()
+
     const [claimRequests, setClaimRequests] = React.useState<ClaimRequestData[]>([]);
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -203,20 +66,201 @@ user: User
     const [columnVisibility, setColumnVisibility] =
       React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
-   
 
 
-    const handleApproveClick = async () => {
+    function updateApproveStatus(claimRequests: ClaimRequestData[], id: string, newApproveStatus: boolean): ClaimRequestData[] {
+      return claimRequests.map(request => 
+        request.id === id ? { ...request, approve: newApproveStatus } : request
+      );
+    }
+    
+    const handleApproveClick = async (claimRequestId : string) => {
       try {
-        const response = await axios.put('/api/claim-request', {
+        const response = await axios.put(`/api/claim-request/${claimRequestId}`, {
           approve: true,
         });
+        let _data = updateApproveStatus(claimRequests , claimRequestId , true); 
+        setClaimRequests([..._data])
+        toast({
+          description: "Approved successfully",
+      })
         console.log('Claim request approved:', response.data);
       } catch (error) {
         console.error('Failed to approve claim request:', error);
       }
     };
+    
+      
+       
+       const columns: ColumnDef<ClaimRequestData>[] = [
+        {
+          accessorKey: "userId",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                user Id
+                <CaretSortIcon className="ml-2 h-4 w-4" />
+              </Button>
+            )
+          },
+          cell: ({ row }) => <div className="lowercase">{row.getValue("userId")}</div>,
+        },
+        
+        {
+          accessorKey: "email",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                Email
+                <CaretSortIcon className="ml-2 h-4 w-4" />
+              </Button>
+            )
+          },
+          cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+        },
+        {
+          accessorKey: "cryptoAddress",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                Crypto Address
+                <CaretSortIcon className="ml-2 h-4 w-4" />
+              </Button>
+            )
+          },
+          cell: ({ row }) => <div className="lowercase">{row.getValue("cryptoAddress")}</div>,
+        },
+     
+        {
+          accessorKey: "phone",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                Phone
+                <CaretSortIcon className="ml-2 h-4 w-4" />
+              </Button>
+            )
+          },
+          cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
+        },
+        {
+          accessorKey: "balance",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                Balance
+                <CaretSortIcon className="ml-2 h-4 w-4" />
+              </Button>
+            )
+          },
+          cell: ({ row }) => {
+            const user = row.original.user as User; // Explicitly type the user object
+            return <div className="lowercase">{user.balance}</div>;
+          },
+        },
+        {
+          accessorKey: "date",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                Date
+                <CaretSortIcon className="ml-2 h-4 w-4" />
+              </Button>
+            )
+          },
+          cell: ({ row }) => <div className="lowercase">{row.getValue("date")}</div>,
+        },
+        {
+          accessorKey: "approve",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                Approve
+                <CaretSortIcon className="ml-2 h-4 w-4" />
+              </Button>
+            )
+          },
+          cell: ({ row }) => {
+            const approveText = row.getValue("approve") ? "Yes" : "No"; // Explicitly type the user object
+            return <div className="lowercase">{approveText}</div>;
+          },
+        },
+        {
+          id: "actions",
+          enableHiding: false,
+          cell: ({ row }) => {
+    
+     
+    
+            return (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <DotsHorizontalIcon className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Actions </DropdownMenuLabel>
+                  <DropdownMenuItem
+                    onClick={()=>{handleApproveClick(row.original.id)}}
+                  >
+                  Aprrove
+                  </DropdownMenuItem>
+                  
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )
+          },
+        },
+      ]
+    
+    
+    
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+   
+
+
+   
 
 
 
