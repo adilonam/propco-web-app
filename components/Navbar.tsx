@@ -59,7 +59,7 @@ export default function Navbar() {
 
   const navigation = [
     { name: 'Home', href:`/${id}`},
-    { name: 'Claim Request', href:`/${id}/claim-request`},
+    // { name: 'Claim Request', href:`/${id}/claim-request`},
     { name: 'About', href: `/${id}/about` },
   ]
 
