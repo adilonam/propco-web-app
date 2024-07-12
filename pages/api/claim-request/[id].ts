@@ -2,13 +2,22 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '../../../lib/prisma';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query;
+  const { id, userId } = req.query;
 
   // Check that the id is a string
-  if (typeof id !== 'string') {
+  if (typeof id !== 'string' || typeof userId !== "string") {
     res.status(400).json({ error: 'Invalid ID format.' });
     return;
   }
+
+
+  const user =await prisma.user.findUnique({where:{id:BigInt(userId) }})
+
+  if (!user || !user.admin) {
+    res.status(403).json({ error: 'User not permitted' });
+    return;
+  }
+  
   
   switch (req.method) {
     case 'GET':

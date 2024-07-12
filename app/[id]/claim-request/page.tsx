@@ -45,7 +45,7 @@ import { ClaimRequest, User } from '@prisma/client';
 import React from 'react';
 import axios from "axios"
 import { useToast } from "@/components/ui/use-toast"
-
+import { useParams } from 'next/navigation'
 
 interface ClaimRequestData extends ClaimRequest  {
 user: User ,
@@ -57,6 +57,10 @@ user: User ,
   export default function ClaimRequestPage() {
 
     const { toast } = useToast()
+    const params = useParams<{ id: string }>()
+    const [user, setUser] = React.useState<User | null>(null);
+
+    const id: BigInt = BigInt(params?.id as string || "0")
 
     const [claimRequests, setClaimRequests] = React.useState<ClaimRequestData[]>([]);
     const [sorting, setSorting] = React.useState<SortingState>([])
@@ -78,7 +82,7 @@ user: User ,
       try {
         const response = await axios.put(`/api/claim-request/${claimRequestId}`, {
           approve: true,
-        });
+        } ,{params: {userId: user?.id}});
         let _data = updateApproveStatus(claimRequests , claimRequestId , true); 
         setClaimRequests([..._data])
         toast({
@@ -286,6 +290,19 @@ user: User ,
 
 
 
+    React.useEffect(() => {
+        if (id) {
+            axios.get(`/api/user/${id}`)
+                .then((response) => {
+                    setUser(response.data);
+
+                })
+                .catch((error) => {
+                    console.error('Error fetching user data:', error.response?.data?.error || 'User not found');
+                    setUser(null);
+                });
+        }
+    }, [id]);
 
 
 
@@ -293,7 +310,7 @@ user: User ,
     React.useEffect(() => {
       const fetchClaimRequests = async () => {
         try {
-          const response = await axios.get<ClaimRequestData[]>('/api/claim-request');
+          const response = await axios.get<ClaimRequestData[]>('/api/claim-request' , {params:{userId:user?.id }});
           setClaimRequests(response.data);
           console.log(response.data);
           
@@ -301,9 +318,11 @@ user: User ,
           console.error('Error fetching claim requests:', error);
         }
       };
+  if(user){
+    fetchClaimRequests();
+  }
   
-      fetchClaimRequests();
-    }, []);
+    }, [user]);
    
     return (
       <div className="w-full">
