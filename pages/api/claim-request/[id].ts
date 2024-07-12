@@ -9,15 +9,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(400).json({ error: 'Invalid ID format.' });
     return;
   }
-
+  
   switch (req.method) {
     case 'GET':
       try {
-        // Get a claim request by ID
+       
         const claimRequest = await prisma.claimRequest.findUnique({
           where: { id },
         });
-
         if (claimRequest) {
           const serializedClaimRequest = { ...claimRequest, userId: claimRequest.userId.toString() };
           res.status(200).json(serializedClaimRequest);
@@ -39,7 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data: { approve },
           });
 
-          const user = await prisma.user.update({
+           await prisma.user.update({
             where: { id: updatedClaimRequest.userId }, 
             data:{balance:0}
           });
@@ -56,18 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         break;
       
 
-    case 'DELETE':
-      try {
-        // Delete a claim request by ID
-        await prisma.claimRequest.delete({
-          where: { id },
-        });
-
-        res.status(204).end();
-      } catch (error) {
-        res.status(500).json({ error: 'Failed to delete claim request.' });
-      }
-      break;
+ 
 
     default:
       res.setHeader('Allow', ['GET', 'PUT', 'DELETE']);

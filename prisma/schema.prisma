@@ -18,6 +18,7 @@ model User {
   firstname          String
   lastname           String
   username           String         @unique
+  admin              Boolean @default(false)
   balance            Float          @default(0)
   invitedFriend      Int            @default(0)
   sourceInvitations  Invitation[]   @relation("sourceUser")

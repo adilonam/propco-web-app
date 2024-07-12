@@ -11,20 +11,24 @@ import "./styleHome.css";
 import { useToast } from "@/components/ui/use-toast"
 import { User } from '@prisma/client';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { RocketIcon } from 'lucide-react';
+import { Wrench, RocketIcon } from 'lucide-react';
 import TaskCard from '@/components/TaskCard';
+import { useRouter } from 'next/navigation'
+import { Button } from "@/components/ui/button"
+
+
+
 
 export default function Home() {
     const [user, setUser] = useState<User | null>(null);
-    const [clickCount, setClickCount] = useState(0);
-    const { toast } = useToast()
+
+    const router = useRouter()
     const params = useParams<{ id: string }>()
 
     const id: BigInt = BigInt(params?.id as string || "0")
 
 
 
-    const [isVibrating, setIsVibrating] = useState(false);
 
     const handleClickTelegram = () => {
         window.location.href = 'https://t.me/propco';
@@ -33,45 +37,11 @@ export default function Home() {
     const handleClickBitmart = () => {
         window.open('https://www.bitmart.com/trade/en-US?symbol=PROPCO_USDT', '_blank');
     };
-    
-    const handleClick = () => {
-        setClickCount(prevCount => prevCount + 1);
-        setIsVibrating(true);
-
-        setTimeout(() => {
-            setIsVibrating(false);
-        }, 200); // Vibration duration
-    };
 
 
-    const handleClaimClick = (userId: BigInt, addAmount: number) => {
-        if (addAmount <= 0) return
-        let userIdNum = Number(userId)
-        axios.put('/api/user/update-balance', {
-            userId: userIdNum,
-            addAmount
-        })
-            .then(response => {
-                setUser(prevUser => {
-                    if (prevUser) {
-                        return {
-                            ...prevUser,
-                            balance: response.data.balance
-                        };
-                    }
-                    return prevUser;
-                });
 
-                setClickCount(0)
-                toast({
-                    description: "Tokens claimed successfully.",
-                })
-                console.log('User updated:', response.data);
-            })
-            .catch(error => {
-                console.error('Error updating user balance:', error.response?.data || error.message);
-            });
-    }
+
+
 
 
 
@@ -80,6 +50,7 @@ export default function Home() {
             axios.get(`/api/user/${id}`)
                 .then((response) => {
                     setUser(response.data);
+
                 })
                 .catch((error) => {
                     console.error('Error fetching user data:', error.response?.data?.error || 'User not found');
@@ -93,6 +64,13 @@ export default function Home() {
         <>
             <div className='container mx-auto py-3'>
                 <div className='flex flex-col justify-center '>
+                    <Alert hidden={!user?.admin} className='mt-2'>
+                        <Wrench className="h-4 w-4" />
+                        <AlertTitle>Admin panel </AlertTitle>
+                        <AlertDescription>
+                            <Button className='mt-3' onClick={()=> {router.push(`/${user?.id}/claim-request`)}} >Claim Request</Button>
+                        </AlertDescription>
+                    </Alert>
 
 
                     <BalanceCard balance={user?.balance || 0} logoSrc={logo} currency="PROPCO" />
@@ -123,14 +101,14 @@ export default function Home() {
 
                     <div className='mt-6'>
                         <h1 className='text-2xl text-center font-bold tracking-tight  sm:text-6xl dark:text-white text-black mt-3'>
-                        Buy PropCo Tokens Now! 🛒
+                            Buy PropCo Tokens Now! 🛒
                         </h1>
                         <Image src={bitmartLogo} alt="telegramLogo" width={100} height={100} className='mx-auto mt-10' onClick={handleClickBitmart} />
                         <p className='text-center mt-2'>click logo to buy</p>
                     </div>
 
 
-                    
+
 
                     <div>
                         <p className='mt-6 text-lg leading-8 text-black dark:text-white text-center'>
