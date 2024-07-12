@@ -24,7 +24,7 @@ type TaskParams = {
   };
 const TaskCard :React.FC<TaskParams> = ({id,  friends, reward }) => {
 
-    const tgMsgUrl = `https://t.me/share/url?url=https%3A%2F%2Ft.me%2FPropcoBot%3Fstart%3D${id}&text=Propco%20tokens%20farming%20major%20upgrade%21%20Two%20is%20better%20than%20one%21%20Join%20my%20squad%2C%20and%20let%27s%20double%20the%20fun%20(and%20earnings%20%F0%9F%A4%91)!%20%F0%9F%9A%80`;
+    const tgMsgUrl = `https://t.me/share/url?url=https%3A%2F%2Ft.me%2FPropcoBot%3Fstart%3D${id}&text=Propco%20Tokens%20gets%20even%20more%20rewarding%21%20Get%20tokens%20for%20referring%20friends%21%20Join%20my%20squad%2C%20and%20let%27s%20double%20the%20fun%20(and%20earnings%20%F0%9F%92%AF)%21%20%F0%9F%9A%80`;
 
     const handleClick = () => {
         window.location.href = tgMsgUrl;
@@ -34,7 +34,7 @@ const TaskCard :React.FC<TaskParams> = ({id,  friends, reward }) => {
 
         <Card className="my-3">
             <CardHeader>
-                <CardTitle>Comnission for {friends} Friend</CardTitle>
+                <CardTitle>Commission for {friends} Friend</CardTitle>
                 <CardDescription>
                     <span className="flex">
 
