@@ -1,6 +1,5 @@
-import { PrismaClient, User } from '@prisma/client';
 
-const prisma = new PrismaClient();
+import { prisma } from './prisma';
 
 export async function createUserIfNotExists(userData: { id: bigint; firstname: string; lastname: string; username: string }) {
   const { id, firstname, lastname, username } = userData;
