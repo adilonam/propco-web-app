@@ -128,25 +128,7 @@ export default function Home() {
                         <p className='text-center mt-2'>click logo to buy</p>
                     </div>
 
-<div className='mt-6'>
-<h1 className='text-2xl text-center font-bold tracking-tight  sm:text-6xl dark:text-white text-black mt-3'>
-                    Click the propco logo for fun and claim tokens! 🎉🎁
-                        </h1>
-                    <div
-                        onClick={handleClick}
-                        className={`mx-auto mt-10  ${isVibrating ? 'vibrate' : ''}`}
-                        style={{ cursor: 'pointer', position: 'relative' }}>
-                        <Image src={logo} alt="logo" width={300} height={300} className='mx-auto mt-5' />
-                    </div>
-                    <div className="max-w-sm mx-auto text-center mt-5 text-lg font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg shadow-lg ">
-                        <p>⚡ Logo clicked {clickCount} times ⚡</p>
-                        <button
-                            onClick={() => handleClaimClick(id, clickCount)}
-                            className="mt-5 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg transition duration-300 ease-in-out">
-                            Claim
-                        </button>
-                    </div>
-</div>
+
                     
 
                     <div>
