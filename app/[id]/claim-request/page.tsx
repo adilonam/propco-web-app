@@ -204,6 +204,23 @@ user: User
       React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
    
+
+
+    const handleApproveClick = async () => {
+      try {
+        const response = await axios.put('/api/claim-request', {
+          approve: true,
+        });
+        console.log('Claim request approved:', response.data);
+      } catch (error) {
+        console.error('Failed to approve claim request:', error);
+      }
+    };
+
+
+
+
+
     const table = useReactTable({
       data:claimRequests,
       columns,

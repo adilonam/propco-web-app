@@ -34,7 +34,7 @@ const TaskCard :React.FC<TaskParams> = ({id,  friends, reward }) => {
 
         <Card className="my-3">
             <CardHeader>
-                <CardTitle>Comission for {friends} Friend</CardTitle>
+                <CardTitle>Comnission for {friends} Friend</CardTitle>
                 <CardDescription>
                     <span className="flex">
 
