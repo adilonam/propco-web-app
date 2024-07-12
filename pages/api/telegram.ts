@@ -71,7 +71,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             reply_markup: {
               inline_keyboard: [[
                 { text: 'Open App', web_app: { url: `${process.env.DOMAIN}/${user.id}` } }
-              ]]
+              ]
+              ,
+              [
+                { text: 'Invite a Friend', url: `https://t.me/share/url?url=https%3A%2F%2Ft.me%2FPropcoBot%3Fstart%3D${user.id}&text=Propco%20Tokens%20gets%20even%20more%20rewarding%21%20Get%20tokens%20for%20referring%20friends%21%20Join%20my%20squad%2C%20and%20let%27s%20double%20the%20fun%20(and%20earnings%20%F0%9F%92%AF)%21%20%F0%9F%9A%80` }
+              ],
+              [
+                { text: 'Buy Propco Tokens', url: 'https://www.bitmart.com/trade/en-US?symbol=PROPCO_USDT' }
+              ]
+            ]
             },
           }),
 
