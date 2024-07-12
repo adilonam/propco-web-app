@@ -43,4 +43,5 @@ model ClaimRequest {
   email String
   cryptoAddress String
   phone String
+  approve Boolean @default(false)
 }

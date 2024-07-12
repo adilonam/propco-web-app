@@ -29,27 +29,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
       break;
 
-    case 'PUT':
-      try {
-        const { date, userId, email, cryptoAddress, phone } = req.body;
-        // Update a claim request by ID
-        const updatedClaimRequest = await prisma.claimRequest.update({
-          where: { id },
-          data: {
-            date,
-            userId,
-            email,
-            cryptoAddress,
-            phone,
-          },
-        });
-
-        const serializedUpdatedClaimRequest = { ...updatedClaimRequest, userId: updatedClaimRequest.userId.toString() };
-        res.status(200).json(serializedUpdatedClaimRequest);
-      } catch (error) {
-        res.status(500).json({ error: 'Failed to update claim request.' });
-      }
-      break;
+      case 'PUT':
+        try {
+          const { approve } = req.body;
+          
+          // Update only the approve field of a claim request by ID
+          const updatedClaimRequest = await prisma.claimRequest.update({
+            where: { id },
+            data: { approve },
+          });
+      
+          const serializedUpdatedClaimRequest = {
+            ...updatedClaimRequest,
+            userId: updatedClaimRequest.userId.toString(),
+          };
+      
+          res.status(200).json(serializedUpdatedClaimRequest);
+        } catch (error) {
+          res.status(500).json({ error: 'Failed to update claim request.' });
+        }
+        break;
+      
 
     case 'DELETE':
       try {
