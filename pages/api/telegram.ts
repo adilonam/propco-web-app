@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { message }: TelegramMessage = req.body;
     console.log(req.body);
     // Ensure we are handling a private chat and the start command
-    if (message && (message.text.startsWith('/start'))) {
+    if (message && typeof message.text === 'string' && message.text.startsWith('/start')) {
       const chatId = BigInt(message.chat.id); // This is the user's Telegram ID, converted to BigInt
 
 

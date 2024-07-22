@@ -59,7 +59,6 @@ export default function Navbar() {
 
   const navigation = [
     { name: 'Home', href:`/${id}`},
-    // { name: 'Claim Request', href:`/${id}/claim-request`},
     { name: 'About', href: `/${id}/about` },
   ]
 
@@ -86,7 +85,8 @@ export default function Navbar() {
                   <div className='flex flex-shrink-0 items-center'>
                     <Image
                       src={logo}
-                      alt='Example Image'
+                      alt='Logo image'
+                      onClick={()=>router.push(`/${id}`)}
                       width={30}
                       height={30}
                     />
