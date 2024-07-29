@@ -102,7 +102,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ balance, logoSrc, currency })
       <div className="px-7 pt-7 pb-3">
         <div className="text-center mb-4">
           <span className="text-3xl font-bold text-gray-800 dark:text-gray-200">{balance.toFixed(2)}</span>
-          <p className='text-xs mt-1' hidden={balance >= parseFloat(process.env.NEXT_PUBLIC_CLAIM_EDGE as string)}>🌟Claim When You Reache {process.env.NEXT_PUBLIC_CLAIM_EDGE}🌟</p>
+          <p className='text-xs mt-1' hidden={balance >= parseFloat(process.env.NEXT_PUBLIC_CLAIM_EDGE as string)}>🌟Claim When You Reach {process.env.NEXT_PUBLIC_CLAIM_EDGE}🌟</p>
           <div hidden={balance < parseFloat(process.env.NEXT_PUBLIC_CLAIM_EDGE as string)}>
             <Dialog>
               <DialogTrigger asChild>
