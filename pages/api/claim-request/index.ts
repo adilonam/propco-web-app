@@ -5,6 +5,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   switch (req.method) {
     case 'GET':
       try {
+        const {  userId } = req.query;
+        if (typeof userId !== "string") {
+          res.status(400).json({ error: 'Invalid ID format.' });
+          return;
+        }
+        const user =await prisma.user.findUnique({where:{id:BigInt(userId) }})
+
+        if (!user || !user.admin) {
+          res.status(403).json({ error: 'User not permitted' });
+          return;
+        }
+
         // Get all claim requests and include user details
         const claimRequests = await prisma.claimRequest.findMany({
           distinct: ['userId'],
