@@ -3,6 +3,7 @@ import Image from 'next/image';
 import logo from '@/assets/logo.png'
 import telegramLogo from '@/assets/telegram.png'
 import bitmartLogo from '@/assets/bitmart.png'
+import uniswapLogo from '@/assets/uniswap.jpeg'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import BalanceCard from '@/components/BalanceCard';
@@ -39,7 +40,9 @@ export default function Home() {
     };
 
 
-
+    const handleClickUniswap = () => {
+        window.open('https://app.uniswap.org/explore/pools/polygon/0xd3ed7dF705e8399BE84838861173dDFC8124c251', '_blank');
+    };
 
 
 
@@ -101,13 +104,19 @@ export default function Home() {
 
                     <div className='mt-6'>
                         <h1 className='text-2xl text-center font-bold tracking-tight  sm:text-6xl dark:text-white text-black mt-3'>
-                            Buy PropCo Tokens Now! 🛒
+                            Buy PropCo on Bitmart🛒
                         </h1>
                         <Image src={bitmartLogo} alt="telegramLogo" width={100} height={100} className='mx-auto mt-10' onClick={handleClickBitmart} />
                         <p className='text-center mt-2'>click logo to buy</p>
                     </div>
 
-
+                    <div className='mt-6'>
+                        <h1 className='text-2xl text-center font-bold tracking-tight  sm:text-6xl dark:text-white text-black mt-3'>
+                            Buy PropCo on Uniswap🛒
+                        </h1>
+                        <Image src={uniswapLogo} alt="telegramLogo" width={150} height={150} className='mx-auto mt-10' onClick={handleClickUniswap} />
+                        <p className='text-center mt-2'>click logo to buy</p>
+                    </div>
 
 
                     <div>
